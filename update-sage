@@ -1,0 +1,36 @@
+#!/bin/sh
+# This script updates Sage and run make ptestlong only if a new develop version
+# is available on github
+# Author: Sebastien Labbe, 16 dec 2015
+
+SAGE_ROOT=/home/labbe/Applications/sage-git
+cd $SAGE_ROOT
+git checkout develop
+
+# Check if a pull is needed in git
+# http://stackoverflow.com/questions/3258243/check-if-pull-needed-in-git
+LOCAL=$(git rev-parse @)
+REMOTE=$(git rev-parse @{u})
+BASE=$(git merge-base @ @{u})
+echo "Local Branch: " $LOCAL
+echo "Remote Branch:" $REMOTE
+echo "Base Branch:  " $BASE
+
+if [ $LOCAL = $REMOTE ]; then
+    echo "Up-to-date"
+elif [ $LOCAL = $BASE ]; then
+    echo "Need to pull"
+
+    git pull github develop
+    make doc-clean
+    rm -rf src/doc/en/slabbe/
+    #rm -f logs/ptestlong.log
+    export MAKE="make -j4"
+    make ptestlong
+    #make start
+    #./sage -tp --all 
+elif [ $REMOTE = $BASE ]; then
+    echo "Need to push"
+else
+    echo "Diverged"
+fi
