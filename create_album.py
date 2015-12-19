@@ -1,5 +1,20 @@
 #!/usr/bin/env python
+r"""
+Creation of photo album from a list of picture filenames
 
+Needs jhead__ program to be installed.
+
+__ http://www.sentex.net/~mwandel/jhead/
+
+EXAMPLES::
+
+	create_album.py -i album.txt -l date --end 2015-03-10 -v
+	create_album.py -i album.txt -l date --start 2015-03-10 -v
+
+AUTHORS:
+
+    - Sebastien Labbe, december 2015, initial version
+"""
 import os
 import argparse
 import subprocess
