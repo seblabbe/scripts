@@ -3,9 +3,15 @@
 # is available on github
 # Author: Sebastien Labbe, 16 dec 2015
 
-SAGE_ROOT=/home/labbe/Applications/sage-git
+# Remove Macports from PATH
+PATH=`echo $PATH | sed -e 's/\/opt\/local\/sbin://'`
+PATH=`echo $PATH | sed -e 's/\/opt\/local\/bin://'`
+echo $PATH
+
+SAGE_ROOT=$HOME/Applications/sage-git
 cd $SAGE_ROOT
 git checkout develop
+git fetch github develop
 
 # Check if a pull is needed in git
 # http://stackoverflow.com/questions/3258243/check-if-pull-needed-in-git
