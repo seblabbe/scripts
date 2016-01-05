@@ -11,6 +11,10 @@ EXAMPLES::
 	create_album.py -i album.txt -l date --end 2015-03-10 -v
 	create_album.py -i album.txt -l date --start 2015-03-10 -v
 
+TODO:
+
+    - Use jpeg python module instead of jhead (->no dependance + faster?)
+
 AUTHORS:
 
     - Sebastien Labbe, december 2015, initial version
