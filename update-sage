@@ -28,6 +28,9 @@ if [ $LOCAL = $REMOTE ]; then
 elif [ $LOCAL = $BASE ]; then
     echo "Need to pull"
 
+    # TODO: check if there are uncommited local changes
+    # and ask to stash them first ...
+
     git pull github develop
     make doc-clean
     rm -rf src/doc/en/slabbe/
