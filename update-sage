@@ -39,6 +39,7 @@ if [ $LOCAL = $REMOTE ]; then
 elif [ $LOCAL = $BASE ]; then
     echo "Local develop branch is behind github/develop, we need to pull"
     git pull github develop
+    # git merge FETCH_HEAD # or equivalently ?
 elif [ $REMOTE = $BASE ]; then
     echo "Error: Local develop branch has commits not in github/develop."
     exit 1
