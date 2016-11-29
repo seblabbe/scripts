@@ -7,10 +7,22 @@
 # Remove Macports from PATH
 PATH=`echo $PATH | sed -e 's/\/opt\/local\/sbin://'`
 PATH=`echo $PATH | sed -e 's/\/opt\/local\/bin://'`
-echo $PATH
+#echo $PATH
 
 SAGE_ROOT=$HOME/Applications/sage-git
 cd $SAGE_ROOT
+
+# Check if there are uncommitted changes
+# http://stackoverflow.com/questions/2657935
+# http://stackoverflow.com/questions/3878624
+if [[ -z $(git status --porcelain) ]]
+then
+  echo "tree is clean"
+else
+  echo "Error: tree is dirty, please commit changes or stash them before running this"
+  exit 1
+fi
+
 git checkout develop
 git fetch github develop
 
@@ -22,26 +34,27 @@ BASE=$(git merge-base @ @{u})
 echo "Local Branch: " $LOCAL
 echo "Remote Branch:" $REMOTE
 echo "Base Branch:  " $BASE
-
 if [ $LOCAL = $REMOTE ]; then
-    echo "Up-to-date"
+    echo "Local develop branch is up-to-date with github, we will re-build sage anyway"
 elif [ $LOCAL = $BASE ]; then
-    echo "Need to pull"
-
-    # TODO: check if there are uncommited local changes
-    # and ask to stash them first ...
-
+    echo "Local develop branch is behind github/develop, we need to pull"
     git pull github develop
-    make doc-clean
-    rm -rf logs
-    export MAKE="make -j4"
-    make start
-    export MAKE="make -j1"
-    make doc
-    export MAKE="make -j4"
-    make ptestlong
 elif [ $REMOTE = $BASE ]; then
-    echo "Need to push"
+    echo "Error: Local develop branch has commits not in github/develop."
+    exit 1
 else
-    echo "Diverged"
+    echo "Error: Local develop branch has diverged from github/develop."
+    exit 1
 fi
+
+# Build Sage
+make doc-clean
+rm -rf logs
+export MAKE="make -j4"
+make start
+export MAKE="make -j1"
+make doc
+export MAKE="make -j4"
+make ptestlong
+
+#TODO: clean branches merged into sage
