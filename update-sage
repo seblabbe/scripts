@@ -33,12 +33,13 @@ elif [ $LOCAL = $BASE ]; then
 
     git pull github develop
     make doc-clean
-    rm -rf src/doc/en/slabbe/
-    #rm -f logs/ptestlong.log
+    rm -rf logs
+    export MAKE="make -j4"
+    make start
+    export MAKE="make -j1"
+    make doc
     export MAKE="make -j4"
     make ptestlong
-    #make start
-    #./sage -tp --all 
 elif [ $REMOTE = $BASE ]; then
     echo "Need to push"
 else
