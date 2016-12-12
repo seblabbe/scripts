@@ -17,9 +17,9 @@ cd $SAGE_ROOT
 # http://stackoverflow.com/questions/3878624
 if [[ -z $(git status --porcelain) ]]
 then
-  echo "tree is clean"
+  echo "update-sage: tree is clean"
 else
-  echo "Error: tree is dirty, please commit changes or stash them before running this"
+  echo "update-sage: Error: tree is dirty, please commit changes or stash them before running this"
   exit 1
 fi
 
@@ -31,31 +31,41 @@ git fetch github develop
 LOCAL=$(git rev-parse @)
 REMOTE=$(git rev-parse @{u})
 BASE=$(git merge-base @ @{u})
-echo "Local Branch: " $LOCAL
-echo "Remote Branch:" $REMOTE
-echo "Base Branch:  " $BASE
+echo "update-sage: Local Branch: " $LOCAL
+echo "update-sage: Remote Branch:" $REMOTE
+echo "update-sage: Base Branch:  " $BASE
 if [ $LOCAL = $REMOTE ]; then
-    echo "Local develop branch is up-to-date with github, we will re-build sage anyway"
+    echo "update-sage: Local develop branch is up-to-date with github, we will re-build sage anyway"
 elif [ $LOCAL = $BASE ]; then
-    echo "Local develop branch is behind github/develop, we need to pull"
+    echo "update-sage: Local develop branch is behind github/develop, we need to pull"
     git pull github develop
     # git merge FETCH_HEAD # or equivalently ?
 elif [ $REMOTE = $BASE ]; then
-    echo "Error: Local develop branch has commits not in github/develop."
+    echo "update-sage: Error: Local develop branch has commits not in github/develop."
     exit 1
 else
-    echo "Error: Local develop branch has diverged from github/develop."
+    echo "update-sage: Error: Local develop branch has diverged from github/develop."
     exit 1
 fi
+
+# Get the number of cpus
+NCPUS=`sage -c "print(sage.parallel.ncpus.ncpus())"`
+# another option is : sage -python src/bin/sage-num-threads.py
+# which outputs 1 2 2
 
 # Build Sage
 make doc-clean
 rm -rf logs
-export MAKE="make -j4"
+export MAKE="make -j$NCPUS"
 make start
 export MAKE="make -j1"
 make doc
-export MAKE="make -j4"
-make ptestlong
+export MAKE="make -j$NCPUS"
+./sage -t -p --all --long --logfile=logs/ptestlong.log #make ptestlong
+
+# make doc is:
+# cd ../.. && sage-logger -p './sage --docbuild --no-pdf-links all html ' logs/dochtml.log
+# make ptestlong is:
+# ./sage -t -p --all --long --logfile=logs/ptestlong.log
 
 #TODO: clean branches merged into sage
