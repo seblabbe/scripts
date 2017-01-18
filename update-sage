@@ -69,3 +69,5 @@ export MAKE="make -j$NCPUS"
 # ./sage -t -p --all --long --logfile=logs/ptestlong.log
 
 #TODO: clean branches merged into sage
+# http://stackoverflow.com/questions/6127328/how-can-i-delete-all-git-branches-which-have-been-merged 
+
