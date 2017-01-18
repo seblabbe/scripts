@@ -37,4 +37,6 @@
 echo "Synchronisation local -> serveur (sput)"
 rsync -za --rsh=ssh --progress --delete --delete-excluded --force $HOME/Documents/ labri:Documents/ 
 
+# pour se rappeler du plus recent sput
+touch $HOME/Documents/.touch
 
