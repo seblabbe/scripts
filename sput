@@ -10,7 +10,7 @@
 #            rsync -Cavuzb . samba:samba/
 #     sync: get put
 #
-# EXAMPLES (from Arnaud Casteigh):
+# EXAMPLES (from Arnaud Casteigts):
 #
 #     rsync -qzac --rsh=ssh --progress --delete --delete-excluded --force
 # 
