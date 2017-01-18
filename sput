@@ -1,0 +1,40 @@
+#!/bin/bash
+#
+# EXAMPLES (from rsync man page):
+#
+#     rsync -Cavz . arvidsjaur:backup
+#     
+#     get:
+#            rsync -avuzb --exclude '*~' samba:samba/ .
+#     put:
+#            rsync -Cavuzb . samba:samba/
+#     sync: get put
+#
+# EXAMPLES (from Arnaud Casteigh):
+#
+#     rsync -qzac --rsh=ssh --progress --delete --delete-excluded --force
+# 
+# QUELQUES OPTIONS DE RSYNC:
+#
+#     -v, --verbose               increase verbosity
+#     -q, --quiet                 suppress non-error messages
+#     -a, --archive               archive mode; same as -rlptgoD (no -H)
+#     -z, --compress              compress file data during the transfer
+#     -c, --checksum              skip based on checksum, not mod-time & size
+#         --delete                delete extraneous files from dest dirs
+#         --delete-excluded       also delete excluded files from dest dirs
+#         --force                 force deletion of dirs even if not empty
+#         --progress              show progress during transfer
+#     -b, --backup                make backups (see --suffix & --backup-dir)
+#     -u, --update                skip files that are newer on the receiver
+#     -C, --cvs-exclude           auto-ignore files in the same way CVS does
+#
+# COMMENTAIRES:
+#
+#     L'option -c (checksum) prend 1min36s versus seulement 3s.
+#
+
+echo "Synchronisation local -> serveur (sput)"
+rsync -za --rsh=ssh --progress --delete --delete-excluded --force $HOME/Documents/ labri:Documents/ 
+
+
