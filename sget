@@ -28,11 +28,16 @@
 #     -b, --backup                make backups (see --suffix & --backup-dir)
 #     -u, --update                skip files that are newer on the receiver
 #     -C, --cvs-exclude           auto-ignore files in the same way CVS does
+#     -n, --dry-run               show what would have been transferred
 #
 # COMMENTAIRES:
 #
 #     L'option -c (checksum) prend 1min36s versus seulement 3s.
 #
+# TODO:
+#
+#     Faire un test de dry run avant de possiblement supprimer des fichiers avec un -f
+#     (avoir un comportement comme git push).
 
 echo "Synchronisation serveur -> local (sget)"
 rsync -za --rsh=ssh --progress --delete --delete-excluded --force labri:Documents/ $HOME/Documents/
