@@ -2,8 +2,8 @@
 
 CIBLE=/Volumes/New\ Volume/rsync
 HOME=/Users/slabbe
-DOSSIERS="bin Misc Desktop GitBox Movies Music Pictures" # .ssh
-RSYNC=rsync -za
+DOSSIERS="bin Misc Desktop Documents GitBox Movies Music Pictures" # .ssh
+RSYNC="rsync -za"
 
 echo "Sauvegarde du HOME dans $CIBLE ..."
 for DOSSIER in $DOSSIERS
@@ -12,10 +12,9 @@ do
     time $RSYNC $HOME/$DOSSIER "$CIBLE"
 done
 
-echo -n "Sauvegarde de /Users/slabbe/Documents ..."
-time $RSYNC $HOME/Documents "$CIBLE"
-
 echo -n "Sauvegarde de zotero ..."
-#time $RSYNC $HOME/Library/Application\ Support/Firefox/Profiles/atrh2jl0.default/zotero "$CIBLE"
 time $RSYNC $HOME/Library/Application\ Support/Firefox/Profiles/67393lr7.default/zotero "$CIBLE"
+
+echo -n "Sauvegarde de Library/Application Support/gramps ..."
+time $RSYNC $HOME/Library/Application\ Support/gramps "$CIBLE"
 
