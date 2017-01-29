@@ -39,5 +39,20 @@
 #     Faire un test de dry run avant de possiblement supprimer des fichiers avec un -f
 #     (avoir un comportement comme git push).
 
-echo "Synchronisation serveur -> local (sget)"
-rsync -za --rsh=ssh --progress --delete --delete-excluded --force labri:Documents/ $HOME/Documents/
+OPTIONS="-za --rsh=ssh --progress --delete --delete-excluded --force"
+
+echo "Running rsync command in dry-run mode ..."
+rsync $OPTIONS --dry-run labri:Documents/ $HOME/Documents/
+echo -n "Proceed with rsync (y/n)? "
+read answer
+if echo "$answer" | grep -iq "^y" ;then
+    echo "You answered Yes."
+    echo "We proceed with the rsync command: server -> $THIS ..."
+    rsync $OPTIONS labri:Documents/ $HOME/Documents/
+    echo "We change the .last file ..."
+    uname -n >> $HOME/Documents/.last
+    scp $HOME/Documents/.last labri:Documents/
+else
+    echo "You answered No. Aborting."
+    exit 1
+fi

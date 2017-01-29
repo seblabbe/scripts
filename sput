@@ -41,25 +41,19 @@
 # computer that most recently pushed to the server. Other lines of the same
 # file contains name of computers that called a sget on the server.
 
-# TODO: currently only checking for deleted file (not newer file that would not
-# be erased by the option -u of rsync). It depends on what we want for this script.
-# Le dry-run pourrait afficher ce qu'il va faire et ensuite on fait YES or NO...
+# TODO: Should we use the option -u ?
 # 
 # TODO: Changer le get pour qu'il ajoute une ligne au fichier .last du serveur.
 
-scp labri:Documents/.last /tmp/.last
-LAST=`cat /tmp/.last`
 THIS=`uname -n`
-if ! grep --quiet "$THIS" /tmp/.last
+if ! ssh labri cat Documents/.last | grep --quiet "$THIS"
 then
-    echo "ERROR: Other computers pushed changes to the server:"
-    cat /tmp/.last
+    echo "ERROR: Other computers pushed changes to the server."
     echo "ERROR: You need to sget and merge those changes in order to sput them."
     exit 1
 else
     echo "Local machine is up-to-date with the server: we can proceed with the sput."
 fi
-rm /tmp/.last
 
 OPTIONS="-za --rsh=ssh --progress --delete --delete-excluded --force"
 
@@ -69,16 +63,18 @@ if [[ ! -z $1 && $1 == "-f" ]]; then
     rsync $OPTIONS $HOME/Documents/ labri:Documents/
 else
     echo "Running rsync command in dry-run mode ..."
-    if rsync $OPTIONS --dry-run $HOME/Documents/ labri:Documents/ | grep "deleting"
-    then
-	echo "sput aborted because some files will be deleted."
-	echo "Rerun with -f to force deletion."
-	exit 1
-    else
-	echo "No file will be deleted: we proceed with the rsync command ..."
+    rsync $OPTIONS --dry-run $HOME/Documents/ labri:Documents/
+    echo -n "Proceed with rsync (y/n)? "
+    read answer
+    if echo "$answer" | grep -iq "^y" ;then
+	echo "You answered Yes."
+	echo "We change the .last file ..."
 	uname -n > $HOME/Documents/.last
-	echo "Synchronisation $THIS -> server"
+	echo "We proceed with the rsync command: $THIS -> server ..."
 	rsync $OPTIONS $HOME/Documents/ labri:Documents/
+    else
+	echo "You answered No. Aborting."
+	exit 1
     fi
 fi
 
