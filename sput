@@ -49,7 +49,7 @@ THIS=`uname -n`
 if ! ssh labri cat Documents/.last | grep --quiet "$THIS"
 then
     echo "ERROR: Other computers pushed changes to the server."
-    echo "ERROR: You need to sget and merge those changes in order to sput them."
+    echo "ERROR: You need to sget and merge those changes first."
     exit 1
 else
     echo "Local machine is up-to-date with the server: we can proceed with the sput."
@@ -67,14 +67,15 @@ else
     echo -n "Proceed with rsync (y/n)? "
     read answer
     if echo "$answer" | grep -iq "^y" ;then
-	echo "You answered Yes."
-	echo "We change the .last file ..."
-	uname -n > $HOME/Documents/.last
-	echo "We proceed with the rsync command: $THIS -> server ..."
-	rsync $OPTIONS $HOME/Documents/ labri:Documents/
+        echo "You answered Yes."
+        echo "We change the .last file whose content is now:"
+        uname -n > $HOME/Documents/.last
+        cat $HOME/Documents/.last
+        echo "We proceed with the rsync command: $THIS -> server ..."
+        rsync $OPTIONS $HOME/Documents/ labri:Documents/
     else
-	echo "You answered No. Aborting."
-	exit 1
+        echo "You answered No. Aborting."
+        exit 1
     fi
 fi
 

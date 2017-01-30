@@ -49,8 +49,9 @@ if echo "$answer" | grep -iq "^y" ;then
     echo "You answered Yes."
     echo "We proceed with the rsync command: server -> $THIS ..."
     rsync $OPTIONS labri:Documents/ $HOME/Documents/
-    echo "We change the .last file ..."
+    echo "We change the .last file whose content is now:"
     uname -n >> $HOME/Documents/.last
+    cat $HOME/Documents/.last
     scp $HOME/Documents/.last labri:Documents/
 else
     echo "You answered No. Aborting."
