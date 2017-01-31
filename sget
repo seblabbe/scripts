@@ -40,6 +40,7 @@
 #     (avoir un comportement comme git push).
 
 OPTIONS="-za --rsh=ssh --progress --delete --delete-excluded --force"
+THIS=`uname -n`
 
 echo "Running rsync command in dry-run mode ..."
 rsync $OPTIONS --dry-run labri:Documents/ $HOME/Documents/
