@@ -39,21 +39,44 @@
 #     Faire un test de dry run avant de possiblement supprimer des fichiers avec un -f
 #     (avoir un comportement comme git push).
 
-OPTIONS="-za --rsh=ssh --progress --delete --delete-excluded --force"
 THIS=`uname -n`
+OPTIONS="-za --rsh=ssh --progress --delete --delete-excluded --force"
 
+# Forced: sget -f
+if [[ ! -z $1 && $1 == "-f" ]]; then
+    echo "Forced Synchronization server -> $THIS"
+    rsync $OPTIONS labri:Documents/ $HOME/Documents/
+    echo "We change the .last file whose content is now:"
+    uname -n >> $HOME/Documents/.last
+    cat $HOME/Documents/.last
+    echo "We update the .last file on the server side ..."
+    rsync $OPTIONS $HOME/Documents/.last labri:Documents/
+    exit 0
+fi
+
+# Check the .last file to see if local machine is in there
+if ssh labri cat Documents/.last | grep --quiet "$THIS"
+then
+    echo "Nothing new on the server."
+    exit 0
+else
+    echo "Other computers pushed changes to the server."
+fi
+
+# Running a dry-run
 echo "Running rsync command in dry-run mode ..."
 rsync $OPTIONS --dry-run labri:Documents/ $HOME/Documents/
 echo -n "Proceed with rsync (y/n)? "
 read answer
 if echo "$answer" | grep -iq "^y" ;then
     echo "You answered Yes."
-    echo "We proceed with the rsync command: server -> $THIS ..."
+    echo "Synchronization server -> $THIS"
     rsync $OPTIONS labri:Documents/ $HOME/Documents/
     echo "We change the .last file whose content is now:"
     uname -n >> $HOME/Documents/.last
     cat $HOME/Documents/.last
-    scp $HOME/Documents/.last labri:Documents/
+    echo "We update the .last file on the server side ..."
+    rsync $OPTIONS $HOME/Documents/.last labri:Documents/
 else
     echo "You answered No. Aborting."
     exit 1
