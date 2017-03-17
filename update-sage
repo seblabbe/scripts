@@ -4,10 +4,16 @@
 # WARNING: Use it at your own risk because I know it does not always work well...
 # Author: Sebastien Labbe, 16 dec 2015
 
-# Remove Macports from PATH
-PATH=`echo $PATH | sed -e 's/\/opt\/local\/sbin://'`
-PATH=`echo $PATH | sed -e 's/\/opt\/local\/bin://'`
-#echo $PATH
+# On Darwin, remove Macports from PATH
+unamestr=`uname`
+if [[ "$unamestr" == 'Linux' ]]; then
+   echo "Linux machine: we do not change variable PATH"
+elif [[ "$unamestr" == 'Darwin' ]]; then
+   echo "Darwin machine: we remove Macports from PATH..."
+   PATH=`echo $PATH | sed -e 's/\/opt\/local\/sbin://'`
+   PATH=`echo $PATH | sed -e 's/\/opt\/local\/bin://'`
+   #echo $PATH
+fi
 
 SAGE_ROOT=$HOME/Applications/sage-git
 cd $SAGE_ROOT
