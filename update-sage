@@ -59,6 +59,10 @@ NCPUS=`sage -c "print(sage.parallel.ncpus.ncpus())"`
 # another option is : sage -python src/bin/sage-num-threads.py
 # which outputs 1 2 2
 
+# Make sure to use CCACHE
+# http://doc.sagemath.org/html/en/installation/source.html#environment-variables
+export SAGE_INSTALL_CCACHE=yes
+
 # Build Sage
 make doc-clean
 rm -rf logs
