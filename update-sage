@@ -70,13 +70,19 @@ else
 fi
 
 # Get the number of cpus
-# another option is : sage -python src/bin/sage-num-threads.py which outputs 1 2 2
-NCPUS=`sage -c "print(sage.parallel.ncpus.ncpus())"`
+# See also `sage -python src/bin/sage-num-threads.py` which outputs 1 2 2
+# NCPUS=`sage -c "print(sage.parallel.ncpus.ncpus())"`
+if [[ "$unamestr" == 'Linux' ]]; then
+    NCPUS=`nproc --all`
+elif [[ "$unamestr" == 'Darwin' ]]; then
+    NCPUS=`sysctl -n hw.ncpu`
+fi
 echo "update-sage: found $NCPUS cpus on this machine"
 
 # Make sure to use CCACHE
 # http://doc.sagemath.org/html/en/installation/source.html#environment-variables
 export SAGE_INSTALL_CCACHE=yes
+export V=0
 
 # make doc-clean
 echo "update-sage: running make doc-clean..."
