@@ -86,7 +86,8 @@ export V=0
 
 # make doc-clean
 echo "update-sage: running make doc-clean..."
-make doc-clean
+# make doc-clean
+cd "$SAGE_ROOT/src/doc" && make clean && cd "$SAGE_ROOT"
 if [ $? -ne 0 ]; then
     echo >&2 "update-sage: Error when runing make doc-clean"
     exit 1
@@ -97,8 +98,8 @@ echo "update-sage: deleting logs repository..."
 rm -rf logs
 
 # Build Sage
+echo "update-sage: running make -j$NCPUS ptestlong..."
 export MAKE="make -j$NCPUS"
-echo "update-sage: running make ptestlong..."
 make ptestlong
 if [ $? -ne 0 ]; then
     echo >&2 "update-sage: Error when runing make ptestlong"
