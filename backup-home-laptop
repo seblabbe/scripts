@@ -1,9 +1,10 @@
 #!/bin/bash
 
-CIBLE=/Volumes/New\ Volume/rsync
+#CIBLE=/Volumes/New\ Volume/rsync
+CIBLE=framboise:/mnt/PIHDD/rsync
 HOME=/Users/slabbe
 DOSSIERS="bin Misc Desktop Documents GitBox Movies Music Pictures" # .ssh
-RSYNC="rsync -za"
+RSYNC="rsync -za --rsh=ssh --progress"
 
 echo "Sauvegarde du HOME dans $CIBLE ..."
 for DOSSIER in $DOSSIERS

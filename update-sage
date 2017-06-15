@@ -7,11 +7,18 @@
 # Debug mode
 # set -xv
 
-# Remove Macports from PATH
-PATH=`echo $PATH | sed -e 's/\/opt\/local\/sbin://'`
-PATH=`echo $PATH | sed -e 's/\/opt\/local\/bin://'`
-#echo $PATH
+# On Darwin, remove Macports from PATH
+unamestr=`uname`
+if [[ "$unamestr" == 'Linux' ]]; then
+   echo "update-sage: on Linux machine, we do not change variable PATH"
+elif [[ "$unamestr" == 'Darwin' ]]; then
+   echo "update-sage: on Darwin machine, we remove Macports from PATH..."
+   PATH=`echo $PATH | sed -e 's/\/opt\/local\/sbin://'`
+   PATH=`echo $PATH | sed -e 's/\/opt\/local\/bin://'`
+   #echo $PATH
+fi
 
+# Set SAGE_ROOT
 if [ -d $HOME/GitBox/sage ]; then
     SAGE_ROOT=$HOME/GitBox/sage
 elif [ -d $HOME/Applications/sage-git ]; then
@@ -62,6 +69,10 @@ fi
 NCPUS=`sage -c "print(sage.parallel.ncpus.ncpus())"`
 # another option is : sage -python src/bin/sage-num-threads.py
 # which outputs 1 2 2
+
+# Make sure to use CCACHE
+# http://doc.sagemath.org/html/en/installation/source.html#environment-variables
+export SAGE_INSTALL_CCACHE=yes
 
 # Build Sage
 make doc-clean
