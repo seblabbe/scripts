@@ -89,6 +89,18 @@ export MAKE="make -j$NCPUS"
 # make ptestlong is:
 # ./sage -t -p --all --long --logfile=logs/ptestlong.log
 
-#TODO: clean branches merged into sage
+# Clean branches merged into sage
 # http://stackoverflow.com/questions/6127328/how-can-i-delete-all-git-branches-which-have-been-merged 
+MERGED=$(git branch --merged develop | egrep -v "(^\*|master|develop)")
+if [ ! -z $MERGED ]; then
+    echo update-sage: The following branches have been merged into sage:
+    echo update-sage: $MERGED
+    for BRANCH in $MERGED
+    do
+        echo update-sage: Branch $BRANCH is:
+        git show $BRANCH -q
+    done
+    echo update-sage: Deleting merged branches ...
+    echo $MERGED | xargs git branch -d
+fi
 
