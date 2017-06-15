@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # This script updates Sage and run make ptestlong only if a new develop version
 # is available on github
 # WARNING: Use it at your own risk because I know it does not always work well...
