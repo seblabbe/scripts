@@ -4,12 +4,22 @@
 # WARNING: Use it at your own risk because I know it does not always work well...
 # Author: Sebastien Labbe, 16 dec 2015
 
+# Debug mode
+# set -xv
+
 # Remove Macports from PATH
 PATH=`echo $PATH | sed -e 's/\/opt\/local\/sbin://'`
 PATH=`echo $PATH | sed -e 's/\/opt\/local\/bin://'`
 #echo $PATH
 
-SAGE_ROOT=$HOME/Applications/sage-git
+if [ -d $HOME/GitBox/sage ]; then
+    SAGE_ROOT=$HOME/GitBox/sage
+elif [ -d $HOME/Applications/sage-git ]; then
+    SAGE_ROOT=$HOME/Applications/sage-git
+else
+    echo "update-sage: unable to set SAGE_ROOT variable"
+    exit 1
+fi
 cd $SAGE_ROOT
 
 # Check if there are uncommitted changes
@@ -34,13 +44,13 @@ BASE=$(git merge-base @ @{u})
 echo "update-sage: Local Branch: " $LOCAL
 echo "update-sage: Remote Branch:" $REMOTE
 echo "update-sage: Base Branch:  " $BASE
-if [ $LOCAL = $REMOTE ]; then
+if [ $(LOCAL) = $(REMOTE) ]; then
     echo "update-sage: Local develop branch is up-to-date with github, we will re-build sage anyway"
-elif [ $LOCAL = $BASE ]; then
+elif [ $(LOCAL) = $(BASE) ]; then
     echo "update-sage: Local develop branch is behind github/develop, we need to pull"
     git pull github develop
     # git merge FETCH_HEAD # or equivalently ?
-elif [ $REMOTE = $BASE ]; then
+elif [ $(REMOTE) = $(BASE) ]; then
     echo "update-sage: Error: Local develop branch has commits not in github/develop."
     exit 1
 else
