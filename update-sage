@@ -98,7 +98,7 @@ echo "update-sage: deleting logs repository..."
 rm -rf logs
 
 # Build Sage
-echo "update-sage: running make -j$NCPUS ptestlong..."
+echo "update-sage: running make -j$NCPUS ..."
 export MAKE="make -j$NCPUS"
 make
 if [ $? -ne 0 ]; then
@@ -107,7 +107,8 @@ if [ $? -ne 0 ]; then
 fi
 
 # Run tests
-./sage -t -p --all --long --show-skipped --logfile=logs/ptestlong.log
+./sage -t -p --all --long --logfile=logs/ptestlongshowskipped.log --show-skipped
+# ./sage -t -p --all --long --optional=sage,optional,external --show-skipped --logfile=logs/ptestallshowskipped.log
 
 # Build Sage with 1 proc for doc
 #export MAKE="make -j$NCPUS"
