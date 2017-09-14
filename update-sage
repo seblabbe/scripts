@@ -105,8 +105,10 @@ if [ $? -ne 0 ]; then
     echo >&2 "update-sage: Error when runing make"
     exit 1
 fi
+echo "update-sage: done running make -j$NCPUS"
 
 # Run tests
+echo "update-sage: running tests..."
 ./sage -t -p --all --long --logfile=logs/ptestlongshowskipped.log --show-skipped
 # ./sage -t -p --all --long --optional=sage,optional,external --show-skipped --logfile=logs/ptestallshowskipped.log
 
