@@ -83,6 +83,8 @@ echo "update-sage: found $NCPUS cpus on this machine"
 # http://doc.sagemath.org/html/en/installation/source.html#environment-variables
 export SAGE_INSTALL_CCACHE=yes
 export V=0
+#https://groups.google.com/d/msg/sage-devel/zQsZsivts0I/Fgiev7hSAwAJ
+export OPENBLAS_CONFIGURE="TARGET=ATOM"
 
 # make doc-clean
 echo "update-sage: running make doc-clean..."
