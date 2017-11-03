@@ -137,3 +137,14 @@ if [ ! -z "$MERGED" ]; then
     echo $MERGED | xargs git branch -d
 fi
 
+
+IPYTHON_CONFIG=`sage -ipython locate`/profile_default/ipython_config.py
+if [ -f $IPYTHON_CONFIG ]; then
+    echo "update-sage: ipython_config.py file found, we do nothing."
+else
+    echo "update-sage: ipython_config.py does not exist, we create it ..."
+    sage -ipython profile create
+    echo "update-sage: setting Linux color in ipython_config.py ..."
+    sed -i "s/#c.InteractiveShell.colors = 'Neutral'/c.InteractiveShell.colors = 'Linux'/" $IPYTHON_CONFIG
+fi
+
