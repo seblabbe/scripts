@@ -3,7 +3,7 @@
 #CIBLE=/Volumes/New\ Volume/rsync
 CIBLE=framboise:/mnt/PIHDD/rsync
 HOME=/Users/slabbe
-DOSSIERS="bin Misc Desktop Documents GitBox Movies Music Pictures" # .ssh
+DOSSIERS="bin Misc Desktop Documents GitBox Movies Music Pictures Zotero" # .ssh
 RSYNC="rsync -za --rsh=ssh --progress"
 
 echo "Sauvegarde du HOME dans $CIBLE ..."
@@ -12,9 +12,6 @@ do
     echo -n "Sauvegarde de /Users/slabbe/$DOSSIER ..."
     time $RSYNC $HOME/$DOSSIER "$CIBLE"
 done
-
-echo -n "Sauvegarde de zotero ..."
-time $RSYNC $HOME/Library/Application\ Support/Firefox/Profiles/67393lr7.default/zotero "$CIBLE"
 
 echo -n "Sauvegarde de Library/Application Support/gramps ..."
 time $RSYNC $HOME/Library/Application\ Support/gramps "$CIBLE"
