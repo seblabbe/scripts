@@ -19,3 +19,20 @@ time $RSYNC $HOME/Library/Application\ Support/Firefox/Profiles/67393lr7.default
 echo -n "Sauvegarde de Library/Application Support/gramps ..."
 time $RSYNC $HOME/Library/Application\ Support/gramps "$CIBLE"
 
+
+#recover
+#rsync -za --progress /media/slabbe/New\ Volume/rsync/Movies ~
+#rsync -za --progress /media/slabbe/New\ Volume/rsync/Music ~
+#rsync -za --progress /media/slabbe/New\ Volume/rsync/Pictures ~
+#rsync -za --progress /media/slabbe/New\ Volume/rsync/gramps ~
+
+# Comme New Volume est en NTFS, il fait de la merde pour les permissions...
+# https://superuser.com/questions/91935/how-to-chmod-all-directories-except-files-recursively
+# find Pictures -type d -exec chmod 750 {} +
+# find Movies   -type d -exec chmod 750 {} +
+# find Musique  -type d -exec chmod 750 {} +
+# find Pictures -type f -exec chmod 640 {} +
+# find Movies   -type f -exec chmod 640 {} +
+# find Musique  -type f -exec chmod 640 {} +
+
+
