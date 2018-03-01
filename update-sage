@@ -83,6 +83,8 @@ echo "update-sage: found $NCPUS cpus on this machine"
 # http://doc.sagemath.org/html/en/installation/source.html#environment-variables
 export SAGE_INSTALL_CCACHE=yes
 export V=0
+#https://groups.google.com/d/msg/sage-devel/zQsZsivts0I/Fgiev7hSAwAJ
+export OPENBLAS_CONFIGURE="TARGET=ATOM"
 
 # make doc-clean
 echo "update-sage: running make doc-clean..."
@@ -133,5 +135,16 @@ if [ ! -z "$MERGED" ]; then
     done
     echo update-sage: Deleting merged branches ...
     echo $MERGED | xargs git branch -d
+fi
+
+
+IPYTHON_CONFIG=`sage -ipython locate`/profile_default/ipython_config.py
+if [ -f $IPYTHON_CONFIG ]; then
+    echo "update-sage: ipython_config.py file found, we do nothing."
+else
+    echo "update-sage: ipython_config.py does not exist, we create it ..."
+    sage -ipython profile create
+    echo "update-sage: setting Linux color in ipython_config.py ..."
+    sed -i "s/#c.InteractiveShell.colors = 'Neutral'/c.InteractiveShell.colors = 'Linux'/" $IPYTHON_CONFIG
 fi
 

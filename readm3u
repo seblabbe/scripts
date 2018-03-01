@@ -1,0 +1,57 @@
+#!/usr/bin/env python3
+r"""
+Read m3u playlist with a given player.
+
+EXAMPLES::
+
+	readm3u liste.m3u -p mplayer
+	readm3u liste.m3u -p omxplayer
+
+AUTHORS:
+
+    - Sebastien Labbe, january 2018, initial version
+"""
+from __future__ import absolute_import, print_function, division, unicode_literals
+
+import sys,os,subprocess,argparse
+import m3u8
+
+def main():
+    # Parse arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument("input", type=str,
+                        help="playlist file (.m3u)")
+    parser.add_argument("-p", "--player", type=str, default='omxplayer',
+                        help="media player")
+    parser.add_argument("-v", "--verbose", default=False, action='store_true', 
+                        help="print filenames per pages")
+    args = parser.parse_args()
+
+    # Read the playlist
+    m3u8_obj = m3u8.load(args.input)
+
+    if args.verbose:
+        print("Files: ", m3u8_obj.files)
+
+    for segment in m3u8_obj.segments:
+        print("[{}s] Song:{}".format(segment.duration, segment.title))
+        if args.verbose:
+            print("path:{}".format(segment.absolute_uri))
+
+        if segment.base_path == 'https://www.youtube.com':
+            cmd = 'mpsyt playurl {}'.format(segment.absolute_uri)
+        else:
+            cmd = '{} {}'.format(args.player, segment.absolute_uri)
+
+        a = subprocess.check_output(cmd, shell=True)
+
+if __name__ == '__main__':
+    try:
+        main()
+    except KeyboardInterrupt:
+        print('Interrupted')
+        try:
+            sys.exit(0)
+        except SystemExit:
+            os._exit(0)
+
