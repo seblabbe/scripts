@@ -1,4 +1,4 @@
-#!/usr/bin/env sage -python
+#!/usr/bin/env sage
 # coding=utf-8
 r"""
 Call tikz2pdf in parallel on all .tikz file in this folder

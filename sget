@@ -40,7 +40,7 @@
 #     (avoir un comportement comme git push).
 
 THIS=`uname -n`
-OPTIONS="-za --rsh=ssh --progress --delete --delete-excluded --force"
+OPTIONS="-zua --rsh=ssh --progress --delete --delete-excluded --force"
 
 # Forced: sget -f
 if [[ ! -z $1 && $1 == "-f" ]]; then
