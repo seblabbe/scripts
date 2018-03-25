@@ -4,8 +4,12 @@ Read m3u playlist with a given player.
 
 EXAMPLES::
 
-	readm3u liste.m3u -p mplayer
-	readm3u liste.m3u -p omxplayer
+    readm3u liste.m3u -p mplayer
+    readm3u liste.m3u -p omxplayer
+
+.. TODO::
+
+    - Make sure it does not hangs on youtube urls
 
 AUTHORS:
 
@@ -34,16 +38,81 @@ def main():
         print("Files: ", m3u8_obj.files)
 
     for segment in m3u8_obj.segments:
-        print("[{}s] Song:{}".format(segment.duration, segment.title))
-        if args.verbose:
-            print("path:{}".format(segment.absolute_uri))
+        print("[{}s] Titre:{}".format(segment.duration, segment.title))
+
+        # March 25 2018: I keep this code in case the problem reappears
+        #if player == 'omxplayer':
+        #    # https://www.raspberrypi.org/forums/viewtopic.php?t=116413
+        #    # kill previous omxplayer to avoid the following error
+        #    # tvservice-client: Failed to connect to TV service: -1
+        #    p = subprocess.Popen(['killall', 'omxplayer.bin'],
+        #            stdin=subprocess.PIPE,
+        #            stdout=None,
+        #            stderr=subprocess.PIPE)
+        #    out, err = p.communicate()
+        #    if not err == b'omxplayer.bin: no process found\n':
+        #        print('some omxplayer were running: good thing we stop them')
+        #    if args.verbose:
+        #        print("out=",out)
+        #        print("err=",err)
+
+        path = segment.absolute_uri
+        if path.count('\\'):
+            path = path.replace('\\','')
+        print("    file:{}".format(path))
 
         if segment.base_path == 'https://www.youtube.com':
-            cmd = 'mpsyt playurl {}'.format(segment.absolute_uri)
+            cmd = ['mpsyt', 'playurl', path]
+        elif args.player == 'omxplayer':
+            # https://github.com/popcornmix/omxplayer/issues/437
+            # the option --no-osd prevents omxplayer from hanging
+            cmd = [args.player, '--no-osd', path]
         else:
-            cmd = '{} {}'.format(args.player, segment.absolute_uri)
+            cmd = [args.player, path]
 
-        a = subprocess.check_output(cmd, shell=True)
+        if args.verbose:
+            print('cmd =',cmd)
+
+        # Option 0
+        # ret = os.system(' '.join(cmd))
+
+        # Option 1
+        # ret = subprocess.check_call(cmd)
+        # print('ret =',ret)
+
+        # Option 2
+        # ret = subprocess.check_call(' '.join(cmd), shell=True)
+        # print('ret =',ret)
+
+        # Option 3 (is better at least because the terminal is normal after
+        # interuption, there is a carriage return)
+        p = subprocess.Popen(cmd,
+                             stdin=subprocess.PIPE,
+                             stdout=subprocess.PIPE,
+                             stderr=None)
+        out, err = p.communicate()
+        if args.verbose:
+            print("out=",out)
+            print("err=",err)
+
+
+# NOTES:
+# 
+# How to use ``subprocess.call`` and friends::
+# 
+#     >>> subprocess.check_call(['omxplayer', '/home/name/Musique/example.mp3'])
+#     Audio codec mp3 channels 1 samplerate 11025 bitspersample 16
+#     Subtitle count: 0, state: off, index: 1, delay: 0
+#     have a nice day ;)
+#     0
+# 
+# If command is a string, one needs to add ``shell=True``::
+# 
+#     >>> subprocess.check_call('omxplayer /home/name/Musique/example.mp3', shell=True)
+#     Audio codec mp3 channels 1 samplerate 11025 bitspersample 16
+#     Subtitle count: 0, state: off, index: 1, delay: 0
+#     have a nice day ;)
+#     0
 
 if __name__ == '__main__':
     try:
