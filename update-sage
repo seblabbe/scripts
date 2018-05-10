@@ -86,15 +86,6 @@ export V=0
 #https://groups.google.com/d/msg/sage-devel/zQsZsivts0I/Fgiev7hSAwAJ
 export OPENBLAS_CONFIGURE="TARGET=ATOM"
 
-# make doc-clean
-echo "update-sage: running make doc-clean..."
-# make doc-clean
-cd "$SAGE_ROOT/src/doc" && make clean && cd "$SAGE_ROOT"
-if [ $? -ne 0 ]; then
-    echo >&2 "update-sage: Error when runing make doc-clean"
-    exit 1
-fi
-
 # Clean logs
 echo "update-sage: deleting logs repository..."
 rm -rf logs
@@ -103,16 +94,30 @@ rm -rf logs
 echo "update-sage: running make -j$NCPUS ..."
 export MAKE="make -j$NCPUS"
 make
+
+# In case of error, make doc-clean and try make again
 if [ $? -ne 0 ]; then
-    echo >&2 "update-sage: Error when runing make"
-    exit 1
+    echo >&2 "update-sage: Error when runing make (probably because of doc)"
+    echo "update-sage: running make doc-clean..."
+    make doc-clean
+    echo "update-sage: running make -j$NCPUS again ..."
+    make
+    if [ $? -ne 0 ]; then
+        echo >&2 "update-sage: Error when runing make (2nd time)"
+        exit 1
+    else
+        echo "update-sage: done running make -j$NCPUS (2nd time), it was succesfull"
+    fi
+else
+    echo "update-sage: done running make -j$NCPUS (1st time), it was succesfull"
 fi
+
 echo "update-sage: done running make -j$NCPUS"
 
 # Run tests
 echo "update-sage: running tests..."
-./sage -t -p --all --long --logfile=logs/ptestlongshowskipped.log --show-skipped
-# ./sage -t -p --all --long --optional=sage,optional,external --show-skipped --logfile=logs/ptestallshowskipped.log
+#./sage -t -p --all --long --logfile=logs/ptestlongshowskipped.log --show-skipped
+./sage -t -p --all --long --optional=sage,optional,external --show-skipped --logfile=logs/ptestallshowskipped.log
 
 # Build Sage with 1 proc for doc
 #export MAKE="make -j$NCPUS"
@@ -143,7 +148,7 @@ if [ -f $IPYTHON_CONFIG ]; then
     echo "update-sage: ipython_config.py file found, we do nothing."
 else
     echo "update-sage: ipython_config.py does not exist, we create it ..."
-    sage -ipython profile create
+    ./sage -ipython profile create
     echo "update-sage: setting Linux color in ipython_config.py ..."
     sed -i "s/#c.InteractiveShell.colors = 'Neutral'/c.InteractiveShell.colors = 'Linux'/" $IPYTHON_CONFIG
 fi
