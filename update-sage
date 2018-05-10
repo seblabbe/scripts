@@ -140,6 +140,8 @@ if [ ! -z "$MERGED" ]; then
     done
     echo update-sage: Deleting merged branches ...
     echo $MERGED | xargs git branch -d
+else
+    echo update-sage: No merged branch found.
 fi
 
 
