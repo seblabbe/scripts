@@ -39,6 +39,14 @@
 #     Faire un test de dry run avant de possiblement supprimer des fichiers avec un -f
 #     (avoir un comportement comme git push).
 
+# TEST INTERNET CONNECTION
+# https://stackoverflow.com/questions/929368/how-to-test-an-internet-connection-with-bash
+wget -q --spider http://google.com
+if [[ ! $? -eq 0 ]]; then
+    echo "No network, bye"
+    exit 1
+fi
+
 THIS=`uname -n`
 OPTIONS="-zua --rsh=ssh --progress --delete --delete-excluded --force"
 
