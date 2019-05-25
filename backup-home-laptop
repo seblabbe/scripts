@@ -1,9 +1,13 @@
 #!/usr/bin/env bash
 
-#CIBLE=/Volumes/New\ Volume/rsync
-CIBLE=framboise:/mnt/PIHDD/rsync
-HOME=/Users/slabbe
-DOSSIERS="bin Misc Desktop Documents GitBox Movies Music Pictures Zotero" # .ssh
+#CIBLE=/Volumes/New\ Volume/rsync         # OSX
+#CIBLE=framboise:/mnt/PIHDD/rsync         # Raspbery pi
+CIBLE=/media/slabbe/New\ Volume/rsync     # on Linux
+
+HOME=/home/slabbe
+
+#DOSSIERS="Documents Videos Musique Images Zotero"
+DOSSIERS="Documents Musique Images Zotero"
 RSYNC="rsync -za --rsh=ssh --progress"
 
 echo "Sauvegarde du HOME dans $CIBLE ..."
@@ -12,10 +16,6 @@ do
     echo -n "Sauvegarde de /Users/slabbe/$DOSSIER ..."
     time $RSYNC $HOME/$DOSSIER "$CIBLE"
 done
-
-echo -n "Sauvegarde de Library/Application Support/gramps ..."
-time $RSYNC $HOME/Library/Application\ Support/gramps "$CIBLE"
-
 
 #recover
 #rsync -za --progress /media/slabbe/New\ Volume/rsync/Movies ~
