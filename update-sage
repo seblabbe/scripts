@@ -135,7 +135,7 @@ echo "update-sage: done installing few optional packages"
 echo "update-sage: running tests..."
 #./sage -t -p --all --long --logfile=logs/ptestlongshowskipped.log --show-skipped
 ./sage -t -p --all --long --optional=sage,optional,external --show-skipped --logfile=logs/ptestallshowskipped.log
-./sage -t -p --failed --long --optional=sage,optional,external --show-skipped --logfile=logs/refailed.log
+./sage -t -p --all --failed --long --optional=sage,optional,external --show-skipped --logfile=logs/refailed.log
 
 # Build Sage with 1 proc for doc
 #export MAKE="make -j$NCPUS"
