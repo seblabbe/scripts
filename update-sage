@@ -123,7 +123,7 @@ make beautifulsoup
 # internet stuff
 make openssl 
 # SAT and LP SOLVERS
-make cbc 
+make cbc sagelib
 make cryptominisat      # dependencies include cmake
 make pycosat 
 make glucose 
