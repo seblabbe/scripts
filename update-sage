@@ -129,6 +129,9 @@ make pycosat
 make glucose 
 # Polytopes
 make pynormaliz         # dependencies include normaliz, e_antic
+# Rise Notebook extension
+./sage -pip install rise
+./sage -sh -c "jupyter-nbextension install rise --py --sys-prefix"
 echo "update-sage: done installing few optional packages"
 
 # Run tests
