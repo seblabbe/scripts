@@ -129,6 +129,8 @@ make pycosat
 make glucose 
 # Polytopes
 make pynormaliz         # dependencies include normaliz, e_antic
+# Automata
+make awali
 echo "update-sage: done installing few optional packages"
 
 # Run tests
