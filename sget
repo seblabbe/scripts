@@ -36,8 +36,8 @@
 #
 # TODO:
 #
-#     Faire un test de dry run avant de possiblement supprimer des fichiers avec un -f
-#     (avoir un comportement comme git push).
+#     - Ajouter une option --soft qui supprime rien (pour quand on a oublié de faire le sput la veille)
+#       possiblement en utilisant SOFTOPTIONS="-zua --rsh=ssh --progress"
 
 # TEST INTERNET CONNECTION
 # https://stackoverflow.com/questions/929368/how-to-test-an-internet-connection-with-bash
