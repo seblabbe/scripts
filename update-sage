@@ -129,6 +129,7 @@ make pycosat
 make glucose 
 # Polytopes
 make pynormaliz         # dependencies include normaliz, e_antic
+make latte_int
 # Automata
 make awali
 # Rise Notebook extension
