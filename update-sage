@@ -127,6 +127,9 @@ make cbc sagelib
 make cryptominisat      # dependencies include cmake
 make pycosat 
 make glucose 
+make sage_numerical_backends_coin
+make sage_numerical_backends_cplex
+make sage_numerical_backends_gurobi
 # Polytopes
 make pynormaliz         # dependencies include normaliz, e_antic
 make latte_int
