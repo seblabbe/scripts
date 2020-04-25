@@ -79,10 +79,12 @@ elif [[ "$unamestr" == 'Darwin' ]]; then
 fi
 echo "update-sage: found $NCPUS cpus on this machine"
 
+# Remove once it is confirmed that ./configure stuff below works
 # Make sure to use CCACHE
 # http://doc.sagemath.org/html/en/installation/source.html#environment-variables
-export SAGE_INSTALL_CCACHE=yes
-export V=0
+# export SAGE_INSTALL_CCACHE=yes
+# export V=0
+
 #https://groups.google.com/d/msg/sage-devel/zQsZsivts0I/Fgiev7hSAwAJ
 export OPENBLAS_CONFIGURE="TARGET=ATOM"
 
@@ -91,8 +93,27 @@ echo "update-sage: deleting logs repository..."
 rm -rf logs
 
 # Configure
-# see https://trac.sagemath.org/ticket/29392
-./configure --enable-experimental-packages --enable-download-from-upstream-url
+echo "update-sage: running configure..."
+./configure --enable-experimental-packages \
+            --enable-download-from-upstream-url \
+            --enable-silent-rules \
+            --enable-ccache \
+            --enable-dot2tex \
+            --enable-rst2ipynb \
+            --enable-beautifulsoup4 \
+            --enable-openssl \
+            --enable-pyopenssl \
+            --enable-cbc \
+            --enable-cryptominisat \
+            --enable-pycosat  \
+            --enable-glucose  \
+            --enable-sage_numerical_backends_coin \
+            --enable-sage_numerical_backends_cplex \
+            --enable-sage_numerical_backends_gurobi \
+            --enable-pynormaliz \
+            --enable-latte_int \
+            --enable-awali \
+            --enable-fricas
 
 # Build Sage
 echo "update-sage: running make -j$NCPUS ..."
@@ -117,30 +138,9 @@ else
 fi
 echo "update-sage: done running make -j$NCPUS"
 
-# Install Optional packages
+# Install Other Optional packages
 echo "update-sage: making sure few optional packages are installed"
-# latex
-make dot2tex
-# notebook stuff
-make rst2ipynb          # dependencies include notedown, pandoc_attributes
-make beautifulsoup 
-# internet stuff
-make openssl 
-# SAT and LP SOLVERS
-make cbc sagelib
-make cryptominisat      # dependencies include cmake
-make pycosat 
-make glucose 
-make sage_numerical_backends_coin
-make sage_numerical_backends_cplex
-make sage_numerical_backends_gurobi
-# Polytopes
-make pynormaliz         # dependencies include normaliz, e_antic
-make latte_int
-# Automata
-make awali
-# Other optional packages
-make fricas
+
 # Rise Notebook extension
 ./sage -pip install rise
 ./sage -sh -c "jupyter-nbextension install rise --py --sys-prefix"
