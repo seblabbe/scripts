@@ -90,6 +90,10 @@ export OPENBLAS_CONFIGURE="TARGET=ATOM"
 echo "update-sage: deleting logs repository..."
 rm -rf logs
 
+# Configure
+# see https://trac.sagemath.org/ticket/29392
+./configure --enable-experimental-packages --enable-download-from-upstream-url
+
 # Build Sage
 echo "update-sage: running make -j$NCPUS ..."
 export MAKE="make -j$NCPUS"
@@ -135,6 +139,8 @@ make pynormaliz         # dependencies include normaliz, e_antic
 make latte_int
 # Automata
 make awali
+# Other optional packages
+make fricas
 # Rise Notebook extension
 ./sage -pip install rise
 ./sage -sh -c "jupyter-nbextension install rise --py --sys-prefix"
