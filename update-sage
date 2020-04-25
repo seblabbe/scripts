@@ -89,8 +89,10 @@ echo "update-sage: found $NCPUS cpus on this machine"
 export OPENBLAS_CONFIGURE="TARGET=ATOM"
 
 # Clean logs
-echo "update-sage: deleting logs repository..."
-rm -rf logs
+echo "update-sage: deleting few log files ..."
+#rm -rf logs   # brakes the configure because it deletes the target of config.log
+rm -f logs/ptestallshowskipped.log
+rm -f logs/refailed.log
 
 # Configure
 echo "update-sage: running configure..."
