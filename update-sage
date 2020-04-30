@@ -96,6 +96,8 @@ rm -f logs/refailed.log
 
 # for later: https://trac.sagemath.org/ticket/21589
         #   --enable-silent-rules \
+        #   --enable-beautifulsoup4 \
+        #   --enable-pyopenssl \
 
 # Configure
 echo "update-sage: running configure..."
@@ -105,9 +107,7 @@ echo "update-sage: running configure..."
             --enable-ccache \
             --enable-dot2tex \
             --enable-rst2ipynb \
-            --enable-beautifulsoup4 \
             --enable-openssl \
-            --enable-pyopenssl \
             --enable-cbc \
             --enable-cryptominisat \
             --enable-pycosat  \
