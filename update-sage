@@ -83,7 +83,7 @@ echo "update-sage: found $NCPUS cpus on this machine"
 # Make sure to use CCACHE
 # http://doc.sagemath.org/html/en/installation/source.html#environment-variables
 # export SAGE_INSTALL_CCACHE=yes
-# export V=0
+export V=0
 
 #https://groups.google.com/d/msg/sage-devel/zQsZsivts0I/Fgiev7hSAwAJ
 export OPENBLAS_CONFIGURE="TARGET=ATOM"
@@ -94,11 +94,14 @@ echo "update-sage: deleting few log files ..."
 rm -f logs/ptestallshowskipped.log
 rm -f logs/refailed.log
 
+# for later: https://trac.sagemath.org/ticket/21589
+        #   --enable-silent-rules \
+
 # Configure
 echo "update-sage: running configure..."
-./configure --enable-experimental-packages \
+./configure \
+            --enable-experimental-packages \
             --enable-download-from-upstream-url \
-            --enable-silent-rules \
             --enable-ccache \
             --enable-dot2tex \
             --enable-rst2ipynb \
