@@ -15,6 +15,7 @@ for DOSSIER in $DOSSIERS
 do
     echo -n "Sauvegarde de /Users/slabbe/$DOSSIER ..."
     time $RSYNC $HOME/$DOSSIER "$CIBLE"
+    #time $RSYNC $HOME/$DOSSIER/ "$CIBLE"/$DOSSIER
 done
 
 #recover
