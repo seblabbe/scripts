@@ -113,12 +113,13 @@ echo "update-sage: running configure..."
             --enable-pycosat  \
             --enable-glucose  \
             --enable-sage_numerical_backends_coin \
-            --enable-sage_numerical_backends_cplex \
-            --enable-sage_numerical_backends_gurobi \
             --enable-pynormaliz \
             --enable-latte_int \
             --enable-awali \
             --enable-fricas
+
+#--enable-sage_numerical_backends_cplex \
+#--enable-sage_numerical_backends_gurobi \
 
 # Build Sage
 echo "update-sage: running make -j$NCPUS ..."
