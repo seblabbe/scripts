@@ -100,6 +100,10 @@ rm -f logs/refailed.log
         #   --enable-pyopenssl \
 
 # Configure
+echo "update-sage: running make configure..."
+make configure
+
+# Configure
 echo "update-sage: running configure..."
 ./configure \
             --enable-experimental-packages \
