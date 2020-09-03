@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+CIBLE=/media/slabbe/3CF2-54ED
+HOME=/home/slabbe
+RSYNC="rsync -za --rsh=ssh --progress"
+
+echo "Sauvegarde du HOME dans $CIBLE ..."
+time $RSYNC $HOME/.thunderbird "$CIBLE"
+
+
