@@ -47,11 +47,11 @@
 
 # TEST INTERNET CONNECTION
 # https://stackoverflow.com/questions/929368/how-to-test-an-internet-connection-with-bash
-wget -q --spider http://google.com
-if [[ ! $? -eq 0 ]]; then
-    echo "No network, bye"
-    exit 1
-fi
+#wget -q --spider http://google.com
+#if [[ ! $? -eq 0 ]]; then
+#    echo "No network, bye"
+#    exit 1
+#fi
 
 THIS=`uname -n`
 OPTIONS="-za --rsh=ssh --progress --delete --delete-excluded --force"
