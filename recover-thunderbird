@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+CIBLE=/media/slabbe/3CF2-54ED
+HOME=/home/slabbe
+RSYNC="rsync -za --rsh=ssh --progress"
+
+echo "Récupération du dossier thunderbird depuis $CIBLE ..."
+time $RSYNC $CIBLE/.thunderbird "$HOME"
+
+
