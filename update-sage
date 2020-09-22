@@ -40,10 +40,20 @@ else
     exit 1
 fi
 
+ORIGIN=github
+# Make sure that remote $ORIGIN is defined
+if [[ -z $(git remote | grep -q $ORIGIN) ]]
+then
+    echo "update-sage: remote $ORIGIN is defined"
+else
+    echo >&2 "update-sage: Error: remote $ORIGIN is not defined"
+    exit 1
+fi
+
 echo "update-sage: checking out develop branch..."
 git checkout develop
-echo "update-sage: fetching github develop branch..."
-git fetch github develop
+echo "update-sage: fetching $ORIGIN develop branch..."
+git fetch $ORIGIN develop
 
 # Check if a pull is needed in git
 # http://stackoverflow.com/questions/3258243/check-if-pull-needed-in-git
@@ -54,18 +64,18 @@ echo "update-sage: Local develop branch: " $LOCAL
 echo "update-sage: Remote develop branch:" $REMOTE
 echo "update-sage: Base branch of both:  " $BASE
 if [ "$LOCAL" = "$REMOTE" ]; then
-    echo "update-sage: Local develop branch is up-to-date with github"
+    echo "update-sage: Local develop branch is up-to-date with $ORIGIN"
     echo "update-sage: Since you asked, we will re-build sage anyway"
 elif [ "$LOCAL" = "$BASE" ]; then
-    echo "update-sage: Local develop branch is behind github/develop, we need to pull"
-    echo "update-sage: pulling github develop branch..."
-    git pull github develop
+    echo "update-sage: Local develop branch is behind $ORIGIN/develop, we need to pull"
+    echo "update-sage: pulling $ORIGIN develop branch..."
+    git pull $ORIGIN develop
     # git merge FETCH_HEAD # or equivalently ?
 elif [ "$REMOTE" = "$BASE" ]; then
-    echo >&2 "update-sage: Error: Local develop branch has commits not in github/develop."
+    echo >&2 "update-sage: Error: Local develop branch has commits not in $ORIGIN/develop."
     exit 1
 else
-    echo >&2 "update-sage: Error: Local develop branch has diverged from github/develop."
+    echo >&2 "update-sage: Error: Local develop branch has diverged from $ORIGIN/develop."
     exit 1
 fi
 
