@@ -141,6 +141,7 @@ echo "update-sage: running configure..."
 # Build Sage
 echo "update-sage: running make -j$NCPUS ..."
 export MAKE="make -j$NCPUS"
+#export MAKE="make -j6"
 make
 
 # In case of error, make doc-clean and try make again
